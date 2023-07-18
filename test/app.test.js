@@ -1,5 +1,5 @@
-import { suite } from "uvu";
-const assert = require("uvu/assert");
+import { suite, assert } from "uvu";
+// const assert = require("uvu/assert");
 
 const nock = require("nock");
 nock.disableNetConnect();
