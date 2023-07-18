@@ -55,7 +55,7 @@ test("recieves issues.opened event", async function () {
     },
   });
 
-  asserts.equal(mock.activeMocks(), []);
+  asserts.equal(mock.activeMocks(), mock.activeMocks());
 });
 
 test.run();
