@@ -20,7 +20,7 @@
     "@vercel/ncc": "^0.36.1",
     "eslint": "^8.45.0",
     "nock": "^13.2.9",
-    "semantic-release": "^20.0.0",
+    "semantic-release": "^21.0.7",
     "uvu": "^0.5.6"
   },
   "release": {
