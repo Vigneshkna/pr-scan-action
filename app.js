@@ -5,7 +5,7 @@
 import * as Octokit from "@octokit/rest";
 import * as Utils from "./config/global-utils.js";
 
-module.exports = (app) => {
+export const app=(app) => {
   app.log("Yay! The app was loaded!");
 
   const workflowName = ["Snyk Bot scan", "TruffleHog Bot scan"];
