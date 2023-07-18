@@ -1,5 +1,5 @@
-const { suite } = require("uvu");
-const assert = require("uvu/assert");
+import { suite } from "uvu";
+const { asserts } = require("uvu/assert");
 
 const nock = require("nock");
 nock.disableNetConnect();
@@ -31,7 +31,7 @@ test("recieves issues.opened event", async function () {
     .post(
       "/repos/probot/example-github-action/issues/1/comments",
       (requestBody) => {
-        assert.equal(requestBody, { body: "Hello, World!" });
+        asserts.equal(requestBody, { body: "Hello, World!" });
 
         return true;
       }
@@ -55,7 +55,7 @@ test("recieves issues.opened event", async function () {
     },
   });
 
-  assert.equal(mock.activeMocks(), []);
+  asserts.equal(mock.activeMocks(), []);
 });
 
 test.run();
