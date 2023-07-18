@@ -1,12 +1,12 @@
-export const c =
-  "https://camo.githubusercontent.com/e8801c915c6aef37567a907c70a535ca95335c2d490a3340d06bba439a1ed005/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f632e706e67";
-export const h =
+module.exports.c =
+  "https://camo.githubusercontent.com/e8801c915c6aef37567a907c70a535ca95335c2d490a3340d06bba439a1ed005/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f632e706e67"
+  module.exports.h =
   "https://camo.githubusercontent.com/9d51f28c19d68a26a2a08210e149d8afec20f84af0925bd9aedbd406c56cad72/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f682e706e67";
-export const m =
+module.exports.m =
   "https://camo.githubusercontent.com/87ff89b4b8f94ce578fb7cf68651203196e42036bb7052c0e196850e22f8d2c9/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6d2e706e67";
-export const l =
+module.exports.l =
   "https://camo.githubusercontent.com/f2ab3e2f2bf334b038843bd4f736d6182625fc72809c7ad3c8504b54444f2128/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6c2e706e67";
-export const footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
+module.exports.footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
 
 export function checkStringContains(string, substring) {
   const regex = new RegExp(substring, "i");
@@ -164,10 +164,10 @@ export function generateSnykComment(data) {
   let h1 = "<h4>" + data.substr(0, data.indexOf("\n")) + "</h4>";
   let headerCount = `<table>
     <tr>
-    <th><img src ="${c}" alt="Critical" width="20" height="20"/><br><p>Critical</p></th>
-    <th><img src ="${h}" alt="High" width="20" height="20"/><br><p>High</p></th>
-    <th><img src ="${m}" alt="Medium" width="20" height="20"/><br><p>Medium</p></th>
-    <th><img src ="${l}" alt="Low" width="20" height="20"/><br><p>Low</p></th>
+    <th><img src ="${exports.c}" alt="Critical" width="20" height="20"/><br><p>Critical</p></th>
+    <th><img src ="${exports.h}" alt="High" width="20" height="20"/><br><p>High</p></th>
+    <th><img src ="${exports.m}" alt="Medium" width="20" height="20"/><br><p>Medium</p></th>
+    <th><img src ="${exports.l}" alt="Low" width="20" height="20"/><br><p>Low</p></th>
     </tr>
     <tr>
     <td><strong>${critical}</strong></td>
@@ -262,12 +262,12 @@ export function convertSnykTable(jsonData) {
       const vulnerability = jsonData[i];
       var imgsrc =
         vulnerability.severity === "Critical"
-          ? c
+          ? exports.c
           : vulnerability.severity === "High"
-          ? h
+          ? exports.h
           : vulnerability.severity === "Medium"
-          ? m
-          : l;
+          ? exports.m
+          : exports.l;
       tableHtml += `
             <tr>
               <td><img src ="${imgsrc}" alt="${vulnerability.severity}" width="20" height="20"/></td>
