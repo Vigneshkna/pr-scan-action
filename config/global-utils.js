@@ -8,17 +8,21 @@ module.exports.l =
   "https://camo.githubusercontent.com/f2ab3e2f2bf334b038843bd4f736d6182625fc72809c7ad3c8504b54444f2128/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6c2e706e67";
 module.exports.footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
 
-export function checkStringContains(string, substring) {
+module.exports.log = function (msg) { 
+    console.log(msg);
+};
+
+module.exports.checkStringContains= function (string, substring) {
   const regex = new RegExp(substring, "i");
   return regex.test(string);
 }
 
-export function getCurrentUser(context) {
+module.exports.getCurrentUser= function (context) {
     const pr = context.payload.pull_request;
     return pr.user.login;
 }
 
-export function parseLogOutput(logOutput, substring) {
+module.exports.parseLogOutput= function (logOutput, substring) {
   var startMarker = "",
     endMarker = "",
     comments = "";
@@ -27,7 +31,7 @@ export function parseLogOutput(logOutput, substring) {
     startMarker = "Testing /home/runner/work/";
     endMarker = "Organization:";
 
-    var snykLogSection = getPartofLog(startMarker, endMarker, logOutput);
+    var snykLogSection = exports.getPartofLog(startMarker, endMarker, logOutput);
 
     var snykLogLi = snykLogSection.split("\n");
     snykLogLi.splice(0, 2);
@@ -81,13 +85,13 @@ export function parseLogOutput(logOutput, substring) {
       
       
     //   `;
-    comments = generateSnykComment(snykPrCmt);
+    comments = exports.generateSnykComment(snykPrCmt);
   } else if (substring === "truffle") {
     startMarker =
       'info-0	thog/scanner	resolved common merge base between references	{"pid":';
     endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
 
-    var truffleLogSection = getPartofLog(startMarker, endMarker, logOutput);
+    var truffleLogSection = exports.getPartofLog(startMarker, endMarker, logOutput);
     truffleLogSection = truffleLogSection.replace(/\/\s+/g, "")
 
     var truffleLogLi = truffleLogSection.split("\n")
@@ -120,12 +124,12 @@ export function parseLogOutput(logOutput, substring) {
       }
       objects.push(obj);
     }
-    comments = generateTruffleTable(objects);
+    comments = exports.generateTruffleTable(objects);
   }
   return comments;
 }
 
-export function generateTruffleTable(data) {
+module.exports.generateTruffleTable= function (data) {
   let table = `<details>
     <summary style="cursor:pointer;outline: none;">
     <h4>🔎 Detected hardcoded secrets in your pull request</h4>
@@ -149,9 +153,9 @@ export function generateTruffleTable(data) {
   return table;
 }
 
-export function generateSnykComment(data) {
+module.exports.generateSnykComment= function (data) {
 
-  var commentData = snykDataSanity(data);
+  var commentData = exports.snykDataSanity(data);
   let critical = 0,
     high = 0,
     medium = 0,
@@ -184,7 +188,7 @@ export function generateSnykComment(data) {
   return snykComment;
 }
 
-export function snykDataSanity(data) {
+module.exports.snykDataSanity= function (data) {
   var snykData = data.replace(/(^[ \t]*\n)/gm, "");
 
   var li = snykData.split("\n");
@@ -194,12 +198,12 @@ export function snykDataSanity(data) {
   cmt = cmt.split("\n");
   cmt = cmt.filter((str) => str.includes("✗") || str.includes("Upgrade"));
 
-  var values = convertSnykJSON(cmt.join("\n"));
+  var values = exports.convertSnykJSON(cmt.join("\n"));
 
   return values;
 }
 
-export function convertSnykJSON(text) {
+module.exports.convertSnykJSON= function (text) {
   const lines = text.split("\n");
   const result = [];
   var pkg = "";
@@ -245,10 +249,10 @@ export function convertSnykJSON(text) {
     return severityOrder[a.severity] - severityOrder[b.severity];
   });
 
-  return convertSnykTable(vulnerabilitiesArray);
+  return exports.convertSnykTable(vulnerabilitiesArray);
 }
 
-export function convertSnykTable(jsonData) {
+module.exports.convertSnykTable= function (jsonData) {
   let tableHtml = `<table><tr>
     <th>Severity</th>
     <th>Attacks</th>
@@ -282,7 +286,7 @@ export function convertSnykTable(jsonData) {
   return tableHtml;
 }
 
-export function getPartofLog(startMarker, endMarker, logOutput) {
+module.exports.getPartofLog= function (startMarker, endMarker, logOutput) {
   // Extract the desired part of the log output 
   const lines = logOutput.split("\n");
   logOutput = lines
