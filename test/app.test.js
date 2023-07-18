@@ -1,14 +1,14 @@
 import { suite } from "uvu";
 import * as asserts  from "uvu/assert";
 
-const nock = require("nock");
+import nock from "nock";
 nock.disableNetConnect();
 
 // disable Probot logs
 process.env.LOG_LEVEL = "fatal";
-const { Probot, ProbotOctokit } = require("probot");
+import * as Probot from"probot";
 
-const app = require("../app");
+import app  from "../app";
 
 /** @type {import('probot').Probot */
 let probot;
