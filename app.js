@@ -8,7 +8,7 @@ import {
   getCurrentUser,
   checkStringContains,
   parseLogOutput,
-} from "./config/global-utils";
+} from "./config/global-utils.js";
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
