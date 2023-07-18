@@ -251,4 +251,4 @@ const getPartofLog = function (startMarker, endMarker, logOutput) {
   return logSection;
 };
 
-export { footer, getCurrentUser,checkStringContains, parseLogOutput };
+export default { footer, getCurrentUser, checkStringContains, parseLogOutput };
