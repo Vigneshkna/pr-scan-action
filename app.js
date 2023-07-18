@@ -2,18 +2,13 @@
  * @param {import('probot').Probot} app
  */
 
-const { Octokit } = require("@octokit/rest");
+import * as Octokit from "@octokit/rest";
 import {
   footer,
   getCurrentUser,
   checkStringContains,
   parseLogOutput,
 } from "./config/global-utils";
-// const {
-//     footer,
-//     getCurrentUser,
-//     checkStringContains,
-//     parseLogOutput} = require('./config/global-utils')
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
