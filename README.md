@@ -1,8 +1,8 @@
-# Probot & GitHub Action example
+# PR-Scan GitHub Action Bot
 
 > This repository is an example of how to create a GitHub Action using Probot
 
-[![Build Status](https://github.com/probot/example-github-action/workflows/Test/badge.svg)](https://github.com/probot/example-github-action/actions)
+[![Build Status](https://github.com/Vigneshkna/pr-scan-action/workflows/Test/badge.svg)](https://github.com/Vigneshkna/pr-scan-action/actions)
 
 If you build a GitHub Action using Probot, we recommend you watch this repository as we will keep updating it implementing best practises and new APIs.
 
@@ -11,17 +11,17 @@ If you build a GitHub Action using Probot, we recommend you watch this repositor
 You can use the action from this example repository:
 
 ```yml
-name: Say Hello World
+name: PrScanAction
 on:
   issues:
     types:
       - opened
 
 jobs:
-  sayHelloWorld:
+  PrScanAction:
     runs-on: ubuntu-latest
     steps:
-      - uses: probot/example-github-action@v1
+      - uses: Vigneshkna/pr-scan-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -31,7 +31,7 @@ See the action in ... action [#1](https://github.com/probot/example-github-actio
 Alternatively, you can pass the token with `with:`
 
 ```yml
-- uses: probot/example-github-action@v1
+- uses: Vigneshkna/pr-scan-action@v1
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     # or
