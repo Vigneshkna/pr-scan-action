@@ -1,8 +1,5 @@
-name: Probot Example
-description: "Example Action built with Probot"
-branding:
-  icon: "gift"
-  color: orange
+name: PrScanAction
+description: "Built action for PR scan"
 runs:
   using: "node12"
   main: "dist/index.js"
