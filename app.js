@@ -107,7 +107,7 @@ module.exports = (app) => {
     }
 
     var truffleSecrets =
-      "<h3>Secrets Bot</h3> \n" +
+      "<h3>Secrets Bot</h3>\n" +
       (truffleOutput === ""
         ? `<i>All good in the hood no uncovered secrets found in raised Pull-Request.</i>`
         : truffleOutput);
