@@ -9,6 +9,11 @@ import {
   checkStringContains,
   parseLogOutput,
 } from "./config/global-utils";
+// const {
+//     footer,
+//     getCurrentUser,
+//     checkStringContains,
+//     parseLogOutput} = require('./config/global-utils')
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");

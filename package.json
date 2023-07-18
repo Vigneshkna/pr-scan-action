@@ -1,6 +1,7 @@
 {
   "name": "pr-scan-action",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "GitHub Action for Secret and SCA scan on pull request",
   "scripts": {
