@@ -3,7 +3,7 @@
  */
 
 const { Octokit } = require("@octokit/rest");
-var Utils = require("./config/global-utils");
+const { Utils } = require("./config/global-utils");
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");

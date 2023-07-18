@@ -1,28 +1,24 @@
-module.exports.c =
-  "https://camo.githubusercontent.com/e8801c915c6aef37567a907c70a535ca95335c2d490a3340d06bba439a1ed005/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f632e706e67"
-  module.exports.h =
+const c =
+  "https://camo.githubusercontent.com/e8801c915c6aef37567a907c70a535ca95335c2d490a3340d06bba439a1ed005/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f632e706e67";
+const h =
   "https://camo.githubusercontent.com/9d51f28c19d68a26a2a08210e149d8afec20f84af0925bd9aedbd406c56cad72/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f682e706e67";
-module.exports.m =
+const m =
   "https://camo.githubusercontent.com/87ff89b4b8f94ce578fb7cf68651203196e42036bb7052c0e196850e22f8d2c9/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6d2e706e67";
-module.exports.l =
+const l =
   "https://camo.githubusercontent.com/f2ab3e2f2bf334b038843bd4f736d6182625fc72809c7ad3c8504b54444f2128/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6c2e706e67";
-module.exports.footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
+const footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
 
-module.exports.log = function (msg) { 
-    console.log(msg);
-};
-
-module.exports.checkStringContains= function (string, substring) {
+const checkStringContains = (string, substring) => {
   const regex = new RegExp(substring, "i");
   return regex.test(string);
-}
+};
 
-module.exports.getCurrentUser= function (context) {
-    const pr = context.payload.pull_request;
-    return pr.user.login;
-}
+const getCurrentUser = (context) => {
+  const pr = context.payload.pull_request;
+  return pr.user.login;
+};
 
-module.exports.parseLogOutput= function (logOutput, substring) {
+const parseLogOutput = (logOutput, substring) => {
   var startMarker = "",
     endMarker = "",
     comments = "";
@@ -31,75 +27,27 @@ module.exports.parseLogOutput= function (logOutput, substring) {
     startMarker = "Testing /home/runner/work/";
     endMarker = "Organization:";
 
-    var snykLogSection = exports.getPartofLog(startMarker, endMarker, logOutput);
+    var snykLogSection = getPartofLog(startMarker, endMarker, logOutput);
 
     var snykLogLi = snykLogSection.split("\n");
     snykLogLi.splice(0, 2);
     var snykPrCmt = snykLogLi.join("\n");
 
-    // var snykcmt = `Tested 30 dependencies for known issues, found 14 issues, 15 vulnerable paths.
-
-
-    //   Issues to fix by upgrading:
-      
-    //     Upgrade chalk@1.1.3 to chalk@2.0.0 to fix
-    //     ✗ Regular Expression Denial of Service (ReDoS) [Critical Severity][https://security.snyk.io/vuln/SNYK-JS-ANSIREGEX-1583908] in ansi-regex@2.1.1
-    //       introduced by chalk@1.1.3 > has-ansi@2.0.0 > ansi-regex@2.1.1 and 1 other path(s)
-      
-    //     Upgrade debug@2.2.0 to debug@2.6.9 to fix
-    //     ✗ Regular Expression Denial of Service (ReDoS) [Low Severity][https://security.snyk.io/vuln/npm:debug:20170905] in debug@2.2.0
-    //       introduced by debug@2.2.0
-    //     ✗ Regular Expression Denial of Service (ReDoS) [Low Severity][https://security.snyk.io/vuln/npm:ms:20170412] in ms@0.7.1
-    //       introduced by debug@2.2.0 > ms@0.7.1
-      
-    //     Upgrade hoek@2.16.3 to hoek@4.2.1 to fix
-    //     ✗ Prototype Pollution [Medium Severity][https://security.snyk.io/vuln/npm:hoek:20180212] in hoek@2.16.3
-    //       introduced by hoek@2.16.3
-      
-    //     Upgrade lodash@3.10.1 to lodash@4.17.21 to fix
-    //     ✗ Regular Expression Denial of Service (ReDoS) [Medium Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-1018905] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Regular Expression Denial of Service (ReDoS) [Medium Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-73639] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Prototype Pollution [Medium Severity][https://security.snyk.io/vuln/npm:lodash:20180130] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Command Injection [High Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-1040724] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Prototype Pollution [High Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-608086] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Prototype Pollution [High Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-450202] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-    //     ✗ Prototype Pollution [High Severity][https://security.snyk.io/vuln/SNYK-JS-LODASH-73638] in lodash@3.10.1
-    //       introduced by lodash@3.10.1
-      
-    //     Upgrade minimist@0.0.10 to minimist@0.2.4 to fix
-    //     ✗ Prototype Pollution [Low Severity][https://security.snyk.io/vuln/SNYK-JS-MINIMIST-2429795] in minimist@0.0.10
-    //       introduced by minimist@0.0.10
-    //     ✗ Prototype Pollution [Medium Severity][https://security.snyk.io/vuln/SNYK-JS-MINIMIST-559764] in minimist@0.0.10
-    //       introduced by minimist@0.0.10
-      
-    //     Upgrade tough-cookie@2.3.4 to tough-cookie@4.1.3 to fix
-    //     ✗ Prototype Pollution (new) [Medium Severity][https://security.snyk.io/vuln/SNYK-JS-TOUGHCOOKIE-5672873] in tough-cookie@2.3.4
-    //       introduced by tough-cookie@2.3.4
-      
-      
-      
-    //   `;
-    comments = exports.generateSnykComment(snykPrCmt);
+    comments = generateSnykComment(snykPrCmt);
   } else if (substring === "truffle") {
     startMarker =
       'info-0	thog/scanner	resolved common merge base between references	{"pid":';
     endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
 
-    var truffleLogSection = exports.getPartofLog(startMarker, endMarker, logOutput);
-    truffleLogSection = truffleLogSection.replace(/\/\s+/g, "")
+    var truffleLogSection = getPartofLog(startMarker, endMarker, logOutput);
+    truffleLogSection = truffleLogSection.replace(/\/\s+/g, "");
 
-    var truffleLogLi = truffleLogSection.split("\n")
+    var truffleLogLi = truffleLogSection.split("\n");
     truffleLogLi.splice(0, 1);
-    var trufflePrCmt = truffleLogLi.join("\n")
+    var trufflePrCmt = truffleLogLi.join("\n");
 
-    trufflePrCmt = trufflePrCmt.replace(/ Found verified result 🐷🔑/g, "")
-    trufflePrCmt = trufflePrCmt.split("\n")
+    trufflePrCmt = trufflePrCmt.replace(/ Found verified result 🐷🔑/g, "");
+    trufflePrCmt = trufflePrCmt.split("\n");
     trufflePrCmt = trufflePrCmt.filter(
       (str) =>
         str !== "" &&
@@ -124,12 +72,12 @@ module.exports.parseLogOutput= function (logOutput, substring) {
       }
       objects.push(obj);
     }
-    comments = exports.generateTruffleTable(objects);
+    comments = generateTruffleTable(objects);
   }
   return comments;
-}
+};
 
-module.exports.generateTruffleTable= function (data) {
+const generateTruffleTable = (data) => {
   let table = `<details>
     <summary style="cursor:pointer;outline: none;">
     <h4>🔎 Detected hardcoded secrets in your pull request</h4>
@@ -151,11 +99,10 @@ module.exports.generateTruffleTable= function (data) {
   });
   table += "</table></details>";
   return table;
-}
+};
 
-module.exports.generateSnykComment= function (data) {
-
-  var commentData = exports.snykDataSanity(data);
+const generateSnykComment = (data) => {
+  var commentData = snykDataSanity(data);
   let critical = 0,
     high = 0,
     medium = 0,
@@ -168,10 +115,10 @@ module.exports.generateSnykComment= function (data) {
   let h1 = "<h4>" + data.substr(0, data.indexOf("\n")) + "</h4>";
   let headerCount = `<table>
     <tr>
-    <th><img src ="${exports.c}" alt="Critical" width="20" height="20"/><br><p>Critical</p></th>
-    <th><img src ="${exports.h}" alt="High" width="20" height="20"/><br><p>High</p></th>
-    <th><img src ="${exports.m}" alt="Medium" width="20" height="20"/><br><p>Medium</p></th>
-    <th><img src ="${exports.l}" alt="Low" width="20" height="20"/><br><p>Low</p></th>
+    <th><img src ="${c}" alt="Critical" width="20" height="20"/><br><p>Critical</p></th>
+    <th><img src ="${h}" alt="High" width="20" height="20"/><br><p>High</p></th>
+    <th><img src ="${m}" alt="Medium" width="20" height="20"/><br><p>Medium</p></th>
+    <th><img src ="${l}" alt="Low" width="20" height="20"/><br><p>Low</p></th>
     </tr>
     <tr>
     <td><strong>${critical}</strong></td>
@@ -186,9 +133,9 @@ module.exports.generateSnykComment= function (data) {
     </summary>`;
   var snykComment = h1 + headerCount + commentData;
   return snykComment;
-}
+};
 
-module.exports.snykDataSanity= function (data) {
+const snykDataSanity = (data) => {
   var snykData = data.replace(/(^[ \t]*\n)/gm, "");
 
   var li = snykData.split("\n");
@@ -198,12 +145,12 @@ module.exports.snykDataSanity= function (data) {
   cmt = cmt.split("\n");
   cmt = cmt.filter((str) => str.includes("✗") || str.includes("Upgrade"));
 
-  var values = exports.convertSnykJSON(cmt.join("\n"));
+  var values = convertSnykJSON(cmt.join("\n"));
 
   return values;
-}
+};
 
-module.exports.convertSnykJSON= function (text) {
+const convertSnykJSON = (text) => {
   const lines = text.split("\n");
   const result = [];
   var pkg = "";
@@ -249,10 +196,10 @@ module.exports.convertSnykJSON= function (text) {
     return severityOrder[a.severity] - severityOrder[b.severity];
   });
 
-  return exports.convertSnykTable(vulnerabilitiesArray);
-}
+  return convertSnykTable(vulnerabilitiesArray);
+};
 
-module.exports.convertSnykTable= function (jsonData) {
+const convertSnykTable = (jsonData) => {
   let tableHtml = `<table><tr>
     <th>Severity</th>
     <th>Attacks</th>
@@ -266,12 +213,12 @@ module.exports.convertSnykTable= function (jsonData) {
       const vulnerability = jsonData[i];
       var imgsrc =
         vulnerability.severity === "Critical"
-          ? exports.c
+          ? c
           : vulnerability.severity === "High"
-          ? exports.h
+          ? h
           : vulnerability.severity === "Medium"
-          ? exports.m
-          : exports.l;
+          ? m
+          : l;
       tableHtml += `
             <tr>
               <td><img src ="${imgsrc}" alt="${vulnerability.severity}" width="20" height="20"/></td>
@@ -284,10 +231,10 @@ module.exports.convertSnykTable= function (jsonData) {
   }
   tableHtml += "</table> </details>";
   return tableHtml;
-}
+};
 
-module.exports.getPartofLog= function (startMarker, endMarker, logOutput) {
-  // Extract the desired part of the log output 
+const getPartofLog = function (startMarker, endMarker, logOutput) {
+  // Extract the desired part of the log output
   const lines = logOutput.split("\n");
   logOutput = lines
     .map((line) =>
@@ -302,4 +249,6 @@ module.exports.getPartofLog= function (startMarker, endMarker, logOutput) {
     endIndex
   );
   return logSection;
-}
+};
+
+module.exports = { footer, getCurrentUser, checkStringContains, parseLogOutput };
