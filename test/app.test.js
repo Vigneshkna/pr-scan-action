@@ -8,7 +8,7 @@ nock.disableNetConnect();
 process.env.LOG_LEVEL = "fatal";
 import * as Probot from"probot";
 
-import app  from "../app";
+import * as app  from "../app";
 
 /** @type {import('probot').Probot */
 let probot;
