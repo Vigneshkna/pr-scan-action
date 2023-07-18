@@ -17,7 +17,7 @@ test.before.each(() => {
   probot = new Probot({
     id: 1,
     githubToken: "test",
-    Octokit: ProbotOctokit.defaults({
+    Octokit: Probot.ProbotOctokit.defaults({
       throttle: { enabled: false },
       retry: { enabled: false },
     }),
