@@ -14,7 +14,8 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
+      - run: npm run build 
       - run: rm .gitignore
       - run: npx semantic-release
         env:
