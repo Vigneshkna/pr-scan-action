@@ -3,7 +3,12 @@
  */
 
 const { Octokit } = require("@octokit/rest");
-const { Utils } = require("./config/global-utils");
+import {
+  footer,
+  getCurrentUser,
+  checkStringContains,
+  parseLogOutput,
+} from "./config/global-utils";
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
@@ -19,7 +24,7 @@ module.exports = (app) => {
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
     app.log.info("Yay, the New Pr is raised!");
-    const user = Utils.getCurrentUser(context);
+    const user = getCurrentUser(context);
 
     var truffleOutput = "",
       snykOutput = "";
@@ -65,7 +70,7 @@ module.exports = (app) => {
               if (
                 (step.conclusion === "failure" ||
                   step.conclusion === "skipped") &&
-                Utils.checkStringContains(step.name, "truffle") &&
+                checkStringContains(step.name, "truffle") &&
                 step.conclusion != "success"
               ) {
                 // Retrieve the response of the failed step
@@ -79,14 +84,11 @@ module.exports = (app) => {
                 var truffleLogOutput = logResponse.data;
                 app.log.error(`logOutput Truffle ->: ${logResponse.data}`);
 
-                truffleOutput = Utils.parseLogOutput(
-                  truffleLogOutput,
-                  "truffle"
-                );
+                truffleOutput = parseLogOutput(truffleLogOutput, "truffle");
               } else if (
                 (step.conclusion === "failure" ||
                   step.conclusion === "skipped") &&
-                Utils.checkStringContains(step.name, "snyk") &&
+                checkStringContains(step.name, "snyk") &&
                 step.conclusion != "success"
               ) {
                 // Retrieve the response of the failed step
@@ -98,7 +100,7 @@ module.exports = (app) => {
                   });
 
                 var snykLogOutput = logResponse.data;
-                snykOutput = Utils.parseLogOutput(snykLogOutput, "snyk");
+                snykOutput = parseLogOutput(snykLogOutput, "snyk");
               }
             }
           }
@@ -122,7 +124,7 @@ module.exports = (app) => {
         `Hey @${user} 👋, Thanks for contributing the new Pull Request !!` +
         truffleSecrets +
         snykSecrets +
-        Utils.footer,
+        footer,
     });
 
     return context.octokit.issues.createComment(msg);
