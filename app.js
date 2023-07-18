@@ -3,12 +3,7 @@
  */
 
 import * as Octokit from "@octokit/rest";
-import {
-  footer,
-  getCurrentUser,
-  checkStringContains,
-  parseLogOutput,
-} from "./config/global-utils.js";
+import * as Utils from "./config/global-utils.js";
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
@@ -24,7 +19,7 @@ module.exports = (app) => {
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
     app.log.info("Yay, the New Pr is raised!");
-    const user = getCurrentUser(context);
+    const user = Utils.getCurrentUser(context);
 
     var truffleOutput = "",
       snykOutput = "";
@@ -70,7 +65,7 @@ module.exports = (app) => {
               if (
                 (step.conclusion === "failure" ||
                   step.conclusion === "skipped") &&
-                checkStringContains(step.name, "truffle") &&
+                  Utils.checkStringContains(step.name, "truffle") &&
                 step.conclusion != "success"
               ) {
                 // Retrieve the response of the failed step
@@ -88,7 +83,7 @@ module.exports = (app) => {
               } else if (
                 (step.conclusion === "failure" ||
                   step.conclusion === "skipped") &&
-                checkStringContains(step.name, "snyk") &&
+                  Utils.checkStringContains(step.name, "snyk") &&
                 step.conclusion != "success"
               ) {
                 // Retrieve the response of the failed step
@@ -100,7 +95,7 @@ module.exports = (app) => {
                   });
 
                 var snykLogOutput = logResponse.data;
-                snykOutput = parseLogOutput(snykLogOutput, "snyk");
+                snykOutput = Utils.parseLogOutput(snykLogOutput, "snyk");
               }
             }
           }
@@ -124,7 +119,7 @@ module.exports = (app) => {
         `Hey @${user} 👋, Thanks for contributing the new Pull Request !!` +
         truffleSecrets +
         snykSecrets +
-        footer,
+        Utils.footer,
     });
 
     return context.octokit.issues.createComment(msg);
