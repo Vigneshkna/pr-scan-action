@@ -22,7 +22,7 @@ test.before.each(() => {
       retry: { enabled: false },
     }),
   });
-  probot.load(app);
+  probot.load(app.app);
 });
 
 test("recieves issues.opened event", async function () {
