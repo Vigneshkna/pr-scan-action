@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/plugin-transform-class-properties": "^7.22.5",
     "@semantic-release/git": "^10.0.1",
-    "@zeit/ncc": "^0.22.3",
+    "@vercel/ncc": "^0.36.1",
     "eslint": "^8.45.0",
     "nock": "^13.2.9",
     "semantic-release": "^20.0.0",
