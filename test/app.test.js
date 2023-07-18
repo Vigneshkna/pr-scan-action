@@ -14,7 +14,7 @@ import * as app from "../app.js";
 let probot;
 const test = suite("app");
 test.before.each(() => {
-  probot = new Probot({
+  probot = new Probot.Probot({
     id: 1,
     githubToken: "test",
     Octokit: Probot.ProbotOctokit.defaults({
