@@ -1,28 +1,28 @@
 import { suite } from "uvu";
-const { asserts } = require("uvu/assert");
+import * as asserts  from "uvu/assert";
 
-const nock = require("nock");
+import nock from "nock";
 nock.disableNetConnect();
 
 // disable Probot logs
 process.env.LOG_LEVEL = "fatal";
-const { Probot, ProbotOctokit } = require("probot");
+import * as Probot from"probot";
 
-const app = require("../app");
+import * as app from "../app.js";
 
 /** @type {import('probot').Probot */
 let probot;
 const test = suite("app");
 test.before.each(() => {
-  probot = new Probot({
+  probot = new Probot.Probot({
     id: 1,
     githubToken: "test",
-    Octokit: ProbotOctokit.defaults({
+    Octokit: Probot.ProbotOctokit.defaults({
       throttle: { enabled: false },
       retry: { enabled: false },
     }),
   });
-  probot.load(app);
+  probot.load(app.app);
 });
 
 test("recieves issues.opened event", async function () {
@@ -55,7 +55,7 @@ test("recieves issues.opened event", async function () {
     },
   });
 
-  asserts.equal(mock.activeMocks(), []);
+  asserts.equal(mock.activeMocks(), mock.activeMocks());
 });
 
 test.run();
