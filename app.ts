@@ -22,17 +22,19 @@ module.exports = (app) => {
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
     app.log.info("Yay, the New Pr is raised!");
     const user = Utils.getCurrentUser(context);
-
+    app.log.info(user);
     var truffleOutput = "",
       snykOutput = "";
 
     const { owner, repo } = context.repo();
+    app.log.info(owner,repo);
 
     // Get the workflows for the repository
-    const response = await Octokit.actions.listWorkflowRunsForRepo({
+    const response = await context.octokit.actions.listWorkflowRunsForRepo({
       owner,
       repo,
     });
+    app.log.info(response);
 
     // Iterate over the workflow runs and retrieve error details
     const workflowRuns = response.data.workflow_runs.filter(
