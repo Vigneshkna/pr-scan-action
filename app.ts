@@ -20,9 +20,10 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
+    app.log(context.payload.pull_request.user.login);
     app.log.info("Yay, the New Pr is raised!");
     const user = Utils.getCurrentUser(context);
-    app.log.info(user);
+    app.log(context.payload.pull_request.user.login);
     var truffleOutput = "",
       snykOutput = "";
 
