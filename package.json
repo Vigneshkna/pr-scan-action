@@ -4,8 +4,8 @@
   "private": true,
   "description": "GitHub Action for Secret and SCA scan on pull request",
   "scripts": {
-    "test": "node test/app.test.js",
-    "build": "ncc build index.js -o dist"
+    "test": "node test/app.test.ts",
+    "build": "ncc build index.ts -o dist"
   },
   "author": "VigneshKannan (https://github.com/Vigneshkna)",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "eslint": "^8.45.0",
     "nock": "^13.3.2",
     "semantic-release": "^21.0.7",
+    "typescript": "^5.1.6",
     "uvu": "^0.5.6"
   },
   "release": {
