@@ -4,7 +4,7 @@
 
 // import * as Octokit from "@octokit/rest";
 //import * as Utils from "./config/global-utils";
-const Octokit = require("@octokit/rest");
+const Octokit = require("./node_modules/@octokit/rest");
 const Utils = require("./config/global-utils.ts")
 
 module.exports = (app) => {
@@ -20,15 +20,14 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    app.log(context.payload.pull_request.user.login);
+    app.log(Octokit);
+    console.log(Octokit);
     app.log.info("Yay, the New Pr is raised!");
     const user = Utils.getCurrentUser(context);
-    app.log(context.payload.pull_request.user.login);
     var truffleOutput = "",
       snykOutput = "";
 
     const { owner, repo } = context.repo();
-    app.log.info(owner,repo);
 
     // Get the workflows for the repository
     const response = await context.octokit.actions.listWorkflowRunsForRepo({
