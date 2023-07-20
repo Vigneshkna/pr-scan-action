@@ -20,11 +20,11 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    app.log(Octokit);
-    console.log(Octokit);
+    app.log(context);
+    console.log(context);
     app.log.info("Yay, the New Pr is raised!");
     const user = Utils.getCurrentUser(context);
-    var truffleOutput = "",
+    let truffleOutput = "",
       snykOutput = "";
 
     const { owner, repo } = context.repo();
@@ -80,7 +80,7 @@ module.exports = (app) => {
                     job_id: job.id,
                   });
 
-                var truffleLogOutput = logResponse.data;
+                let truffleLogOutput = logResponse.data;
                 app.log.error(`logOutput Truffle ->: ${logResponse.data}`);
 
                 truffleOutput = Utils.parseLogOutput(truffleLogOutput, "truffle");
@@ -98,7 +98,7 @@ module.exports = (app) => {
                     job_id: job.id,
                   });
 
-                var snykLogOutput = logResponse.data;
+                let snykLogOutput = logResponse.data;
                 snykOutput = Utils.parseLogOutput(snykLogOutput, "snyk");
               }
             }
@@ -107,12 +107,12 @@ module.exports = (app) => {
       }
     }
 
-    var truffleSecrets =
+    let truffleSecrets =
       "<h3>Secrets Bot</h3>\n" +
       (truffleOutput === ""
         ? `<i>All good in the hood no uncovered secrets found in raised Pull-Request.</i>`
         : truffleOutput);
-    var snykSecrets =
+    let snykSecrets =
       "<h3>SCA Bot</h3> \n" +
       (snykOutput === ""
         ? `<i>All good in the hood no vulnerable package found in raised Pull-Request.</i>`
