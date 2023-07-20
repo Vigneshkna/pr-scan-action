@@ -2,7 +2,9 @@
  * @param {import('probot').Probot} app
  */
 
-//const Octokit = require("@octokit/rest");
+// import * as Octokit from "@octokit/rest";
+//import * as Utils from "./config/global-utils";
+const Octokit = require("@octokit/rest");
 const Utils = require("./config/global-utils.ts")
 
 module.exports = (app) => {
@@ -27,7 +29,7 @@ module.exports = (app) => {
     const { owner, repo } = context.repo();
 
     // Get the workflows for the repository
-    const response = await context.octokit.actions.actions.listWorkflowRunsForRepo({
+    const response = await Octokit.actions.listWorkflowRunsForRepo({
       owner,
       repo,
     });
@@ -42,7 +44,7 @@ module.exports = (app) => {
 
     for (const run of workflowRuns) {
       if (run.conclusion === "failure" && run.event === "pull_request") {
-        const jobsResponse = await context.octokit.actions.actions.listJobsForWorkflowRun({
+        const jobsResponse = await Octokit.actions.listJobsForWorkflowRun({
           owner,
           repo,
           run_id: run.id,
@@ -50,7 +52,7 @@ module.exports = (app) => {
 
         // Iterate over jobs and find the failed step
         for (const job of jobsResponse.data.jobs) {
-          const jobDetails = await context.octokit.actions.actions.getJobForWorkflowRun({
+          const jobDetails = await Octokit.actions.getJobForWorkflowRun({
             owner,
             repo,
             job_id: job.id,
@@ -70,7 +72,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await context.octokit.actions.actions.downloadJobLogsForWorkflowRun({
+                  await Octokit.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
@@ -88,7 +90,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await context.octokit.actions.actions.downloadJobLogsForWorkflowRun({
+                  await Octokit.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
@@ -122,6 +124,6 @@ module.exports = (app) => {
         Utils.footer,
     });
 
-    return context.octokit.actions.issues.createComment(msg);
+    return context.octokit.issues.createComment(msg);
   });
 };
