@@ -11,11 +11,11 @@
   "license": "ISC",
   "repository": "github:Vigneshkna/pr-scan-action",
   "dependencies": {
-    "@probot/adapter-github-actions": "^3.1.1"
+    "@probot/adapter-github-actions": "^3.1.1",
+    "@octokit/rest": "^20.0.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-class-properties": "^7.22.5",
-    "@octokit/rest": "^20.0.1",
     "@semantic-release/git": "^10.0.1",
     "@vercel/ncc": "^0.36.1",
     "eslint": "^8.45.0",
