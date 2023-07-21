@@ -30,7 +30,7 @@ module.exports = (app) => {
     const { owner, repo } = context.repo();
 
     // Get the workflows for the repository
-    const response = await context.octokit.actions.listWorkflowRunsForRepo({
+    const response = await context.octokit.rest.actions.listWorkflowRunsForRepo({
       owner,
       repo,
     });
@@ -46,7 +46,7 @@ module.exports = (app) => {
 
     for (const run of workflowRuns) {
       if (run.conclusion === "failure" && run.event === "pull_request") {
-        const jobsResponse = await Octokit.actions.listJobsForWorkflowRun({
+        const jobsResponse = await context.octokit.rest.actions.listJobsForWorkflowRun({
           owner,
           repo,
           run_id: run.id,
@@ -54,7 +54,7 @@ module.exports = (app) => {
 
         // Iterate over jobs and find the failed step
         for (const job of jobsResponse.data.jobs) {
-          const jobDetails = await Octokit.actions.getJobForWorkflowRun({
+          const jobDetails = await context.octokit.rest.actions.getJobForWorkflowRun({
             owner,
             repo,
             job_id: job.id,
@@ -74,7 +74,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await Octokit.actions.downloadJobLogsForWorkflowRun({
+                  await context.octokit.rest.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
@@ -92,7 +92,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await Octokit.actions.downloadJobLogsForWorkflowRun({
+                  await context.octokit.rest.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
