@@ -15,7 +15,7 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN, request: {
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
 
-  const workflowName = ["Snyk Bot scan", "TruffleHog Bot scan"];
+  const workflowName = ["Bot scan"];
 
   app.on("issues.opened", async (context) => {
     app.log("Yay! The new issues opened!");
@@ -25,7 +25,7 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    app.log.info("Yay, the New Pr is raised!");
+    app.log.info("Yay!, The New Pull-Request is opened / reopened!");
     
     const user = Utils.getCurrentUser(context);
     let truffleOutput = "",
@@ -38,7 +38,6 @@ module.exports = (app) => {
       owner,
       repo,
     });
-    app.log.info(response);
 
     // Iterate over the workflow runs and retrieve error details
     const workflowRuns = response.data.workflow_runs.filter(
@@ -85,8 +84,6 @@ module.exports = (app) => {
                   });
 
                 let truffleLogOutput = logResponse.data;
-                app.log.error(`logOutput Truffle ->: ${logResponse.data}`);
-
                 truffleOutput = Utils.parseLogOutput(truffleLogOutput, "truffle");
               } else if (
                 (step.conclusion === "failure" ||
