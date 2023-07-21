@@ -7,6 +7,8 @@
 const Octokit = require("@octokit/rest");
 const Utils = require("./config/global-utils.ts")
 
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
 
@@ -20,9 +22,8 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    //const octokit = new context.octokit({ auth: process.env.GITHUB_TOKEN });
-    app.log.info(process.env.GITHUB_TOKEN);
     app.log.info("Yay, the New Pr is raised!");
+    myfun()
     const user = Utils.getCurrentUser(context);
     let truffleOutput = "",
       snykOutput = "";
@@ -128,4 +129,15 @@ module.exports = (app) => {
 
     return context.octokit.issues.createComment(msg);
   });
+
+  
+async function myfun() {
+  try {
+    // Example: Get the repository information
+    const { data: repo } = await octokit.repos.get({ owner: 'owner-name', repo: 'repo-name' });
+    console.log(repo);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
 };
