@@ -20,7 +20,7 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+    const octokit = new context.octokit({ auth: process.env.GITHUB_TOKEN });
     app.log.info(octokit);
     app.log.info("Yay, the New Pr is raised!");
     const user = Utils.getCurrentUser(context);
