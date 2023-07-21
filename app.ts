@@ -5,9 +5,12 @@
 // import * as Octokit from "@octokit/rest";
 //import * as Utils from "./config/global-utils";
 const { Octokit } = require("@octokit/rest");
+const OctoKitfetch = require("node-fetch");
 const Utils = require("./config/global-utils.ts")
 
-//const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN, request: {
+  fetch: OctoKitfetch,
+}, });
 
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
@@ -23,7 +26,7 @@ module.exports = (app) => {
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
     app.log.info("Yay, the New Pr is raised!");
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+    
     const user = Utils.getCurrentUser(context);
     let truffleOutput = "",
       snykOutput = "";
