@@ -15,7 +15,7 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN, request: {
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
 
-  const workflowName = ["Bot scan"];
+  const workflowName = ["Snyk Bot scan", "TruffleHog Bot scan","Bot scan"];
 
   app.on("issues.opened", async (context) => {
     app.log("Yay! The new issues opened!");
@@ -84,6 +84,7 @@ module.exports = (app) => {
                   });
 
                 let truffleLogOutput = logResponse.data;
+
                 truffleOutput = Utils.parseLogOutput(truffleLogOutput, "truffle");
               } else if (
                 (step.conclusion === "failure" ||
