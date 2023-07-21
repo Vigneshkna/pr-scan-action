@@ -7,6 +7,8 @@
 const Octokit = require("@octokit/rest");
 const Utils = require("./config/global-utils.ts")
 
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
 module.exports = (app) => {
   app.log("Yay! The app was loaded!");
 
@@ -20,9 +22,8 @@ module.exports = (app) => {
   });
 
   app.on(["pull_request.opened", "pull_request.reopened"], async (context) => {
-    //const octokit = new context.octokit({ auth: process.env.GITHUB_TOKEN });
-    app.log.info(process.env.GITHUB_TOKEN);
     app.log.info("Yay, the New Pr is raised!");
+    myfun()
     const user = Utils.getCurrentUser(context);
     let truffleOutput = "",
       snykOutput = "";
@@ -30,7 +31,7 @@ module.exports = (app) => {
     const { owner, repo } = context.repo();
 
     // Get the workflows for the repository
-    const response = await context.Octokit.rest.actions.listWorkflowRunsForRepo({
+    const response = await context.Octokit.actions.listWorkflowRunsForRepo({
       owner,
       repo,
     });
@@ -46,7 +47,7 @@ module.exports = (app) => {
 
     for (const run of workflowRuns) {
       if (run.conclusion === "failure" && run.event === "pull_request") {
-        const jobsResponse = await context.Octokit.rest.actions.listJobsForWorkflowRun({
+        const jobsResponse = await context.Octokit.actions.listJobsForWorkflowRun({
           owner,
           repo,
           run_id: run.id,
@@ -54,7 +55,7 @@ module.exports = (app) => {
 
         // Iterate over jobs and find the failed step
         for (const job of jobsResponse.data.jobs) {
-          const jobDetails = await context.Octokit.rest.actions.getJobForWorkflowRun({
+          const jobDetails = await context.Octokit.actions.getJobForWorkflowRun({
             owner,
             repo,
             job_id: job.id,
@@ -74,7 +75,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await context.Octokit.rest.actions.downloadJobLogsForWorkflowRun({
+                  await context.Octokit.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
@@ -92,7 +93,7 @@ module.exports = (app) => {
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
-                  await context.Octokit.rest.actions.downloadJobLogsForWorkflowRun({
+                  await context.Octokit.actions.downloadJobLogsForWorkflowRun({
                     owner,
                     repo,
                     job_id: job.id,
@@ -128,4 +129,15 @@ module.exports = (app) => {
 
     return context.octokit.issues.createComment(msg);
   });
+
+  
+async function myfun() {
+  try {
+    // Example: Get the repository information
+    const { data: repo } = await octokit.repos.get({ owner: 'owner-name', repo: 'repo-name' });
+    console.log(repo);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
 };
