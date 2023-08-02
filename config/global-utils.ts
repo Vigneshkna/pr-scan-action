@@ -38,8 +38,8 @@ const parseLogOutput = (logOutput, substring) => {
   } else if (substring === "truffle") {
     startMarker =
       'info-0	thog/scanner	resolved common merge base between references	{"pid":';
-      endMarker = 'Timestamp:';
-    //endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
+      //endMarker = 'Timestamp:';
+    endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
 
     var truffleLogSection = getPartofLog(startMarker, endMarker, logOutput);
     truffleLogSection = truffleLogSection.replace(/\/\s+/g, "");
