@@ -6,7 +6,7 @@ const c =
   "https://camo.githubusercontent.com/87ff89b4b8f94ce578fb7cf68651203196e42036bb7052c0e196850e22f8d2c9/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6d2e706e67";
   const l =
   "https://camo.githubusercontent.com/f2ab3e2f2bf334b038843bd4f736d6182625fc72809c7ad3c8504b54444f2128/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6c2e706e67";
-  const footer = `Please consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
+  const footer = `\nPlease consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
 
   
 const checkStringContains = (string, substring) => {
@@ -38,7 +38,8 @@ const parseLogOutput = (logOutput, substring) => {
   } else if (substring === "truffle") {
     startMarker =
       'info-0	thog/scanner	resolved common merge base between references	{"pid":';
-    endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
+      endMarker = 'Timestamp:';
+    //endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
 
     var truffleLogSection = getPartofLog(startMarker, endMarker, logOutput);
     truffleLogSection = truffleLogSection.replace(/\/\s+/g, "");
@@ -98,9 +99,7 @@ const generateTruffleTable = (data) => {
     }
     table += "</tr>\n";
   });
-  let  guidelines = `
-
-  <details>
+  let  guidelines = `<details>
   <summary><h4>🛠 Guidelines to remediate hardcoded secrets</h4></summary>
   <br>
   
