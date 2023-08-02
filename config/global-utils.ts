@@ -98,7 +98,24 @@ const generateTruffleTable = (data) => {
     }
     table += "</tr>\n";
   });
-  table += "</table></details>";
+  let  guidelines = `
+
+  <details>
+  <summary><h4>🛠 Guidelines to remediate hardcoded secrets</h4></summary>
+  <br>
+  
+  1. Understand the implications of revoking this secret by investigating where it is used in your code.
+  2. Replace and store your secrets safely. [Learn here](https://blog.gitguardian.com/secrets-api-management?utm_source=product&amp;utm_medium=GitHub_checks&amp;utm_campaign=check_run_comment) the best practices.
+  3. Revoke and [rotate these secrets](https://docs.gitguardian.com/secrets-detection/detectors/specifics/private_key_openssh#revoke-the-secret?utm_source=product&amp;utm_medium=GitHub_checks&amp;utm_campaign=check_run_comment).
+  4. If possible, [rewrite git history](https://blog.gitguardian.com/rewriting-git-history-cheatsheet?utm_source=product&amp;utm_medium=GitHub_checks&amp;utm_campaign=check_run_comment). Rewriting git history is not a trivial act. You might completely break other contributing developers' workflow and you risk accidentally deleting legitimate data.
+  
+  To avoid such incidents in the future consider
+  
+  -   following these [best practices](https://blog.gitguardian.com/secrets-api-management/?utm_source=product&amp;utm_medium=GitHub_checks&amp;utm_campaign=check_run_comment) for managing and storing secrets including API keys and other credentials
+  
+  </details>
+  `
+  table += "</table></details>" + guidelines;
   return table;
 };
 
