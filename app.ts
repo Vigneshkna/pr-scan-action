@@ -67,13 +67,13 @@ module.exports = (app) => {
             workflowName.includes(w.name)
           );
           const { conclusion } = jobDetails.data;
-          if (conclusion === "failure") {
+          if (conclusion === "failure" || conclusion === "success") {
             for (const step of steps) {
               if (
-                (step.conclusion === "failure" ||
-                  step.conclusion === "skipped") &&
+                // (step.conclusion === "failure" ||
+                //   step.conclusion === "skipped") &&
                   Utils.checkStringContains(step.name, "truffle") &&
-                step.conclusion != "success"
+                step.conclusion === "success" && conclusion === "success"
               ) {
                 // Retrieve the response of the failed step
                 const logResponse =
@@ -86,7 +86,7 @@ module.exports = (app) => {
                 let truffleLogOutput = logResponse.data;
 
                 truffleOutput = Utils.parseLogOutput(truffleLogOutput, "truffle");
-              } else if (
+              } else if (conclusion === "failure" &&
                 (step.conclusion === "failure" ||
                   step.conclusion === "skipped") &&
                   Utils.checkStringContains(step.name, "snyk") &&
