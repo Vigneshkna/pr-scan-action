@@ -132611,12 +132611,13 @@ module.exports = (app) => {
                     });
                     const steps = jobDetails.data.steps.filter((w) => workflowName.includes(w.name));
                     const { conclusion } = jobDetails.data;
-                    if (conclusion === "failure") {
+                    if (conclusion === "failure" || conclusion === "success") {
                         for (const step of steps) {
-                            if ((step.conclusion === "failure" ||
-                                step.conclusion === "skipped") &&
-                                Utils.checkStringContains(step.name, "truffle") &&
-                                step.conclusion != "success") {
+                            if (
+                            // (step.conclusion === "failure" ||
+                            //   step.conclusion === "skipped") &&
+                            Utils.checkStringContains(step.name, "truffle") &&
+                                step.conclusion === "success" && conclusion === "success") {
                                 // Retrieve the response of the failed step
                                 const logResponse = await octokit.actions.downloadJobLogsForWorkflowRun({
                                     owner,
@@ -132626,8 +132627,9 @@ module.exports = (app) => {
                                 let truffleLogOutput = logResponse.data;
                                 truffleOutput = Utils.parseLogOutput(truffleLogOutput, "truffle");
                             }
-                            else if ((step.conclusion === "failure" ||
-                                step.conclusion === "skipped") &&
+                            else if (conclusion === "failure" &&
+                                (step.conclusion === "failure" ||
+                                    step.conclusion === "skipped") &&
                                 Utils.checkStringContains(step.name, "snyk") &&
                                 step.conclusion != "success") {
                                 // Retrieve the response of the failed step
@@ -132672,7 +132674,7 @@ const c = "https://camo.githubusercontent.com/e8801c915c6aef37567a907c70a535ca95
 const h = "https://camo.githubusercontent.com/9d51f28c19d68a26a2a08210e149d8afec20f84af0925bd9aedbd406c56cad72/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f682e706e67";
 const m = "https://camo.githubusercontent.com/87ff89b4b8f94ce578fb7cf68651203196e42036bb7052c0e196850e22f8d2c9/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6d2e706e67";
 const l = "https://camo.githubusercontent.com/f2ab3e2f2bf334b038843bd4f736d6182625fc72809c7ad3c8504b54444f2128/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f736e796b2f696d6167652f75706c6f61642f775f32302c685f32302f76313536313937373831392f69636f6e2f6c2e706e67";
-const footer = `\nPlease consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
+const footer = `\n\nPlease consider investigating the findings and remediating the incidents. Failure to do so may lead to compromising the associated services or software components.`;
 const checkStringContains = (string, substring) => {
     const regex = new RegExp(substring, "i");
     return regex.test(string);
@@ -132697,6 +132699,7 @@ const parseLogOutput = (logOutput, substring) => {
             'info-0	thog/scanner	resolved common merge base between references	{"pid":';
         //endMarker = 'Timestamp:';
         endMarker = 'info-0	thog/scanner	finished scanning commits	{"pid":';
+        console.log(logOutput);
         var truffleLogSection = getPartofLog(startMarker, endMarker, logOutput);
         truffleLogSection = truffleLogSection.replace(/\/\s+/g, "");
         var truffleLogLi = truffleLogSection.split("\n");
