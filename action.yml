@@ -45,7 +45,7 @@ runs:
           chmod +x snyk
           ls -lrt
           echo "----------Authenticating Snyk-----------"
-          ./snyk auth ${{ secrets.SNYK_TOKEN }}
+          ./snyk auth $SNYK_KEY
           echo "----------Snyk Scanning-----------"
           ./snyk test --all-projects --json | tee snyk-output.json
           echo $(pwd)
