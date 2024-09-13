@@ -11,8 +11,8 @@
   "license": "ISC",
   "repository": "github:Vigneshkna/pr-scan-action",
   "dependencies": {
-    "@probot/adapter-github-actions": "^3.1.1",
-    "@octokit/rest": "^20.0.1"
+    "@octokit/rest": "^20.0.1",
+    "@probot/adapter-github-actions": "^3.1.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-class-properties": "^7.22.5",
@@ -20,7 +20,7 @@
     "@vercel/ncc": "^0.36.1",
     "eslint": "^8.45.0",
     "nock": "^13.3.2",
-    "semantic-release": "^21.0.7",
+    "semantic-release": "^24.1.1",
     "typescript": "^5.1.6",
     "uvu": "^0.5.6"
   },

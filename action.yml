@@ -1,5 +1,58 @@
 name: PrScanAction
 description: "Built action for PR scan"
+
+inputs:
+  snyk_key:
+    description: 'Snyk API Key'
+    required: false
+  tools:
+    description: 'Comma-separated list of tools to run (e.g., snyk, trufflehog)'
+    required: true
+
 runs:
-  using: "node16"
-  main: "dist/index.js"
+  using: composite
+  steps:
+    - name: Set up environment
+      id: setup
+      shell: bash
+      run: |
+        echo "TOOLS=${{ inputs.tools }}" >> $GITHUB_ENV
+        echo "SNYK_KEY=${{ inputs.snyk_key }}" >> $GITHUB_ENV
+        mkdir -p reports
+    
+    - name: Set up Node.js 20
+      id: setup_node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Run Snyk
+      id: snyk_scan
+      shell: bash
+      if: contains(env.TOOLS, 'snyk')
+      run: |
+        if [ -z "$SNYK_KEY" ]; then
+          echo "SNYK_KEY is not set"
+          exit 1
+        fi
+        
+        rm -rf node_modules
+        rm -f package-lock.json
+        echo "----------NPM install------------"
+        npm install
+        echo "----------Download Latest Snyk CLI-----------"
+          curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.1293.0/snyk-linux"
+          chmod +x snyk
+          ls -lrt
+          echo "----------Authenticating Snyk-----------"
+          ./snyk auth ${{ secrets.SNYK_TOKEN }}
+          echo "----------Snyk Scanning-----------"
+          ./snyk test --all-projects --json | tee snyk-output.json
+          echo $(pwd)
+          node ./.github/action/snyk-data-to-json.js snyk-output.json ../report/snyk-report.json
+    
+    - name: Run Node.js Post-processing
+      run: |
+        echo $(pwd)
+        node dist/index.js 
+      shell: bash
